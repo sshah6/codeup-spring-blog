@@ -3,12 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>A single post</title>
+    <!--    including header-->
+    <span th:replace="partials/header :: header"></span>
 </head>
 <body>
-    <div th:each="post : ${onePost}" >
-        <h1 th:text="${post.title}"></h1>
-        <h3 th:text="${post.body}"></h3>
-    </div>
+<!--including the navbar here-->
+<div th:replace="partials/navbar :: navbar"></div>
+
+<div th:each="post : ${onePost}">
+    <h1 th:text="${post.title}"></h1>
+    <h3 th:text="${post.body}"></h3>
+</div>
 
 </body>
+<!--including the footer here-->
+<div th:replace="partials/footer :: footer"></div>
 </html>

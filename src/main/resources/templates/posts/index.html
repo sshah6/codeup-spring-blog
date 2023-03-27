@@ -3,14 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>All posts</title>
+    <!--    including header file's fragment named header as our header here-->
+    <span th:replace="partials/header :: header"></span>
 </head>
 <body>
+<!--Including the navbar file's fragment as our navbar here-->
+<div th:replace="partials/navbar :: navbar"></div>
 
-    <div th:each="post : ${posts}" th:if="${post.id == n}">
-        <h1> <p th:text="${post.title}"></p></h1>
-       <h3> <p th:text="${post.body}"></p></h3>
-        <hr>
-    </div>
+<div th:each="post : ${posts}" th:if="${post.id == n}">
+    <h1><p th:text="${post.title}"></p></h1>
+    <h3><p th:text="${post.body}"></p></h3>
+    <hr>
+</div>
 
 </body>
+<!--Including the footer file's fragment as our footer here-->
+<div th:replace="partials/footer :: footer"></div>
 </html>

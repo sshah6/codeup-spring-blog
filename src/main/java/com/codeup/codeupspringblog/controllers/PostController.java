@@ -14,19 +14,19 @@ public class PostController {
 
     @GetMapping("/posts")
     @ResponseBody
-    public String getPosts(){
+    public String getPosts() {
         return "Home for posts";
     }
 
     @GetMapping("/posts/{id}")
     @ResponseBody
-    public String getPostId(@PathVariable long id){
+    public String getPostId(@PathVariable long id) {
         return "post with the id of: " + id;
     }
 
     @GetMapping("/posts/create")
     @ResponseBody
-    public String getPostsCreate(){
+    public String getPostsCreate() {
         return "<h1><form method=\"POST\">" +
                 "<label for=\"title\">Title:</label><br>" +
                 "<input type=\"text\" id=\"title\" name=\"title\"><br>" +
@@ -45,7 +45,7 @@ public class PostController {
 
     @PostMapping("/posts/create")
     @ResponseBody
-    public String postsCreate(@RequestParam String title, @RequestParam String content, Model model){
+    public String postsCreate(@RequestParam String title, @RequestParam String content, Model model) {
         return " <h1> post created with title \"" + title + "\" and content of \"" + content + "\"</h1>";
 //        int sum = num1 + num2;
 //        return "<h1> The sum of " + num1 + " and " + num2 + " is " + sum + "</h1>";
@@ -53,7 +53,7 @@ public class PostController {
     }
 
     @GetMapping("/posts/show")
-    public String showPost(Model model){
+    public String showPost(Model model) {
         List<Post> onePost = new ArrayList<>(List.of(
                 new Post(1, "About PC", "Everyone user a pc these days")
         ));
@@ -63,9 +63,9 @@ public class PostController {
     }
 
     @GetMapping("/posts/index/{n}")
-    public String showPosts(Model model, @PathVariable int n){
+    public String showPosts(Model model, @PathVariable int n) {
         List<Post> posts = new ArrayList<>(Arrays.asList(
-                new Post(1,"About PC", "Everyone user a pc these days"),
+                new Post(1, "About PC", "Everyone user a pc these days"),
                 new Post(2, "About bikes", "Biking keeps you healthy"),
                 new Post(3, "number 3", "What a beautiful number 3")
         ));
