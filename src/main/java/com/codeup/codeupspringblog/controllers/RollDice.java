@@ -1,9 +1,10 @@
 package com.codeup.codeupspringblog.controllers;
 
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Random;
 
@@ -11,20 +12,24 @@ import java.util.Random;
 public class RollDice {
 
     @GetMapping("/roll-dice")
-    public String getGuess(){
-        return "roll-dice";
+    public String getGuess() {
+        return "/roll-dice";
     }
 
-    @PostMapping("/roll-dice")
-    public String getGuess(@RequestParam int guess){
-        System.out.println(guess);
+    @GetMapping("/roll-dice/{n}")
+    public String getGuessN(@PathVariable int n, Model model){
+        System.out.println(n);
         Random random = new Random();
         int randomNum = random.nextInt(6) + 1;
-        if(guess == randomNum){
-            System.out.println("Correct");
-        }else{
-            System.out.println("Not correct");
-        }
-        return "redirect:/";
+        model.addAttribute("random", randomNum);
+        //you can compare here too but in this case its compared in html file
+//        if(n == randomNum){
+//            System.out.println("correct");
+//            return "roll-dice";
+//        }else{
+//            System.out.println("incorrect");
+//            return "roll-dice";
+//        }
+        return "roll-dice";
     }
 }
