@@ -1,6 +1,9 @@
 package com.codeup.codeupspringblog.Model;
+import jakarta.persistence.*;
 
+@Entity
 public class Post {
+    @Id
     private long id;
     private String title;
     private String body;
@@ -9,6 +12,10 @@ public class Post {
         this.id = id;
         this.title = title;
         this.body = body;
+    }
+
+    public Post() {
+
     }
 
     public long getId() {
@@ -34,4 +41,9 @@ public class Post {
     public void setBody(String body) {
         this.body = body;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 }
