@@ -11,11 +11,11 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(columnDefinition = "varchar(100)", nullable = false)
+    @Column(columnDefinition = "varchar(100)", nullable = false, length = 60)
     private String username;
-    @Column(columnDefinition = "varchar(100)", nullable = false)
+    @Column(columnDefinition = "varchar(100)", nullable = false, length = 60)
     private String email;
-    @Column(columnDefinition = "varchar(100)", nullable = false)
+    @Column(columnDefinition = "varchar(100)", nullable = false, length = 60)
     private String password;
 
     //establishes the relationship of one to many below
