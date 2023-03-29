@@ -10,7 +10,7 @@
 <!--Including the navbar file's fragment as our navbar here-->
 <div th:replace="partials/navbar :: navbar"></div>
 
-<div th:each="post : ${posts}" th:if="${post.id == n}">
+<div th:each="post : ${posts}" >
     <h1><p th:text="${post.title}"></p></h1>
     <h3><p th:text="${post.body}"></p></h3>
     <hr>

@@ -2,8 +2,10 @@ package com.codeup.codeupspringblog.Model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "posts")
 public class Post {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String title;
     private String body;
@@ -16,6 +18,11 @@ public class Post {
 
     public Post() {
 
+    }
+
+    public Post(String title, String body) {
+        this.title = title;
+        this.body = body;
     }
 
     public long getId() {

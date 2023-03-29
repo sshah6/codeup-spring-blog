@@ -8,30 +8,33 @@ import org.hibernate.annotations.GeneratorType;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private long id;
 
     //if we want the column to do some special things, but we have to make new table tho
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private String name;
     private int CostInCents;
 
     public Product(long id, String name, int costInCents) {
-        Id = id;
+        this.id = id;
+        this.name = name;
+        CostInCents = costInCents;
+    }
+
+    public Product(String name, int costInCents) {
         this.name = name;
         CostInCents = costInCents;
     }
 
     public Product() {
-
     }
 
-    @jakarta.persistence.Id
     public long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getName() {
@@ -49,5 +52,4 @@ public class Product {
     public void setCostInCents(int costInCents) {
         CostInCents = costInCents;
     }
-
 }

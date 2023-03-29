@@ -20,17 +20,17 @@ package com.codeup.codeupspringblog.Model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="dogs", uniqueConstraints = @UniqueConstraint(columnNames = "age", name = "UK_age"))
+@Table(name="dogs", uniqueConstraints = @UniqueConstraint(columnNames = "age", name = "UK_???????('age')"))
 public class Dogs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, columnDefinition= "int(11) auto_Increment")
+    @Column(name = "id", nullable = false, columnDefinition= "int(11)")
     private int id;
     @Column(name="age", columnDefinition = "tinyint(3)", nullable = false)
     private int age;
     @Column(name="name", nullable = false, columnDefinition = "varchar(200)")
     private String name;
-    @Column(columnDefinition = "char(2) default 'XX'")
+    @Column(name = "reside_state", columnDefinition = "char(2) default 'XX'")
     private String reside_state;
 
     public Dogs(int id, int age, String name, String reside_state) {

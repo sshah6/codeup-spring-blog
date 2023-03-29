@@ -10,7 +10,7 @@
 <!--including the navbar here-->
 <div th:replace="partials/navbar :: navbar"></div>
 
-<div th:each="post : ${onePost}">
+<div>
     <h1 th:text="${post.title}"></h1>
     <h3 th:text="${post.body}"></h3>
 </div>
