@@ -2,7 +2,10 @@ package com.codeup.codeupspringblog.controllers;
 
 import com.codeup.codeupspringblog.Model.Post;
 import com.codeup.codeupspringblog.Model.Product;
+import com.codeup.codeupspringblog.Model.User;
+import com.codeup.codeupspringblog.Model.Users;
 import com.codeup.codeupspringblog.repositories.PostRepository;
+import com.codeup.codeupspringblog.repositories.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +18,10 @@ import java.util.Optional;
 @Controller
 public class PostController {
     private PostRepository postsDao;
-    public PostController(PostRepository postsDao) {
+    private UserRepository usersDao;
+    public PostController(PostRepository postsDao, UserRepository usersDao) {
         this.postsDao = postsDao;
+        this.usersDao = usersDao;
     }
 
     @GetMapping("posts/create")
@@ -27,9 +32,10 @@ public class PostController {
     @PostMapping("posts/create")
     public String createPost(@RequestParam String title, @RequestParam String body){
 //        System.out.println(title);
-        Post post1 = new Post(title, body);
-        postsDao.save(post1);
-        return "redirect:/posts/index";
+        User user = Users.randomUser(usersDao);
+        Post post = new Post(title, body, user);
+        postsDao.save(post);
+        return "redirect:/posts";
     }
 
     @GetMapping("posts")
