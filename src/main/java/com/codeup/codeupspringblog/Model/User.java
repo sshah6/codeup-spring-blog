@@ -42,7 +42,7 @@ public class User {
         this.id = id;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 

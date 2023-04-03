@@ -1,27 +1,27 @@
 package com.codeup.codeupspringblog.controllers;
 
 import com.codeup.codeupspringblog.Model.Post;
-import com.codeup.codeupspringblog.Model.Product;
 import com.codeup.codeupspringblog.Model.User;
 import com.codeup.codeupspringblog.Model.Users;
 import com.codeup.codeupspringblog.repositories.PostRepository;
 import com.codeup.codeupspringblog.repositories.UserRepository;
+import com.codeup.codeupspringblog.services.EmailService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class PostController {
     private PostRepository postsDao;
     private UserRepository usersDao;
-    public PostController(PostRepository postsDao, UserRepository usersDao) {
+    private final EmailService emailService;
+
+    public PostController(PostRepository postsDao, UserRepository usersDao, EmailService emailService) {
         this.postsDao = postsDao;
         this.usersDao = usersDao;
+        this.emailService = emailService;
     }
 
     @GetMapping("posts/create")
@@ -30,12 +30,13 @@ public class PostController {
         return "posts/create";
     }
 
-
     @PostMapping("posts/create")
     public String createPost(@ModelAttribute Post post){
         User user = Users.randomUser(usersDao);
         post.setUser(user);
         postsDao.save(post);
+
+        emailService.prepareAndSend(post, "Testing create", "Testing the create method");
         return "redirect:/posts";
     }
 
@@ -43,16 +44,27 @@ public class PostController {
     public String editPost(@PathVariable long id, Model model){
         Post post = postsDao.findById(id).get();
         model.addAttribute("post", post);
+//        Long user = post.getUser(usersDao).getId();
+//        System.out.println(user);
         return "posts/edit";
     }
 
     //Redirecting to another pages uses url, and it always needs a slash in the front.
+//    @PostMapping("posts/{id}/edit")
+//    public String editPost(@ModelAttribute Post post, @PathVariable long id){
+//        User user = Users.randomUser(usersDao);
+//        post.setUser(user);
+//        post.setId(id);
+//        postsDao.save(post);
+//        return "redirect:/posts/" + id +"/find";
+//    }
+
     @PostMapping("posts/{id}/edit")
     public String editPost(@ModelAttribute Post post, @PathVariable long id){
-        User user = Users.randomUser(usersDao);
-        post.setUser(user);
-        post.setId(id);
-        postsDao.save(post);
+        Post edited = postsDao.findById(id).get();
+        edited.setTitle(post.getTitle());
+        edited.setBody(post.getBody());
+        postsDao.save(edited);
         return "redirect:/posts/" + id +"/find";
     }
 
@@ -82,7 +94,7 @@ public class PostController {
     @GetMapping("posts/{id}/delete")
     public String deletePost(@PathVariable long id){
         postsDao.deleteById(id);
-        return "redirect:/posts/index";
+        return "redirect:/posts";
     }
 
     @GetMapping("posts/{id}/find")

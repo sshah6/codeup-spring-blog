@@ -16,7 +16,7 @@
   <!--        <button type="submit">Create post</button>-->
   <!--    </form>-->
 <!--  <form th:action="@{posts/{id}/edit}" th:method="post" th:object="${post}">-->
-  <form th:action="@{/posts/{id}/edit(id=*{id})}" th:method="post" th:object="${post}">
+  <form th:action="@{/posts/{id}/edit(id=${post.id})}" th:method="post" th:object="${post}">
 
   Title:
     <input th:field="*{title}">
