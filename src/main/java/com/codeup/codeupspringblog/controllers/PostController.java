@@ -25,33 +25,67 @@ public class PostController {
     }
 
     @GetMapping("posts/create")
-    public String createThePost(){
+    public String createThePost(Model model){
+        model.addAttribute("post", new Post());
         return "posts/create";
     }
 
+
     @PostMapping("posts/create")
-    public String createPost(@RequestParam String title, @RequestParam String body){
-//        System.out.println(title);
+    public String createPost(@ModelAttribute Post post){
         User user = Users.randomUser(usersDao);
-        Post post = new Post(title, body, user);
+        post.setUser(user);
         postsDao.save(post);
         return "redirect:/posts";
     }
 
+    @GetMapping("posts/{id}/edit")
+    public String editPost(@PathVariable long id, Model model){
+        Post post = postsDao.findById(id).get();
+        model.addAttribute("post", post);
+        return "posts/edit";
+    }
+
+    //Redirecting to another pages uses url, and it always needs a slash in the front.
+    @PostMapping("posts/{id}/edit")
+    public String editPost(@ModelAttribute Post post, @PathVariable long id){
+        User user = Users.randomUser(usersDao);
+        post.setUser(user);
+        post.setId(id);
+        postsDao.save(post);
+        return "redirect:/posts/" + id +"/find";
+    }
+
+// =========> The following methods use normal methods not Form model binding <=======
+
+//    @GetMapping("posts/create")
+//    public String createThePost(){
+//        return "posts/create";
+//    }
+//
+//    @PostMapping("posts/create")
+//    public String createPost(@RequestParam String title, @RequestParam String body){
+////        System.out.println(title);
+//        User user = Users.randomUser(usersDao);
+//        Post post = new Post(title, body, user);
+//        postsDao.save(post);
+//        return "redirect:/posts";
+//    }
+//
     @GetMapping("posts")
     public String getPosts(Model model){
         List<Post> posts = postsDao.findAll();
         model.addAttribute("posts", posts);
         return "posts/index";
     }
-
-    @GetMapping("posts/delete/{id}")
+//
+    @GetMapping("posts/{id}/delete")
     public String deletePost(@PathVariable long id){
         postsDao.deleteById(id);
         return "redirect:/posts/index";
     }
 
-    @GetMapping("posts/find/{id}")
+    @GetMapping("posts/{id}/find")
     public String findPost(@PathVariable long id, Model model){
         Post post = postsDao.findById(id).get();
         model.addAttribute("post", post);
