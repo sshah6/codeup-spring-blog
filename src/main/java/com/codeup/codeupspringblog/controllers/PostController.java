@@ -1,16 +1,19 @@
 package com.codeup.codeupspringblog.controllers;
 
+import ch.qos.logback.core.net.SMTPAppenderBase;
 import com.codeup.codeupspringblog.Model.Post;
 import com.codeup.codeupspringblog.Model.User;
 import com.codeup.codeupspringblog.Model.Users;
 import com.codeup.codeupspringblog.repositories.PostRepository;
 import com.codeup.codeupspringblog.repositories.UserRepository;
 import com.codeup.codeupspringblog.services.EmailService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class PostController {
@@ -24,6 +27,8 @@ public class PostController {
         this.emailService = emailService;
     }
 
+
+
     @GetMapping("posts/create")
     public String createThePost(Model model){
         model.addAttribute("post", new Post());
@@ -32,20 +37,26 @@ public class PostController {
 
     @PostMapping("posts/create")
     public String createPost(@ModelAttribute Post post){
-        User user = Users.randomUser(usersDao);
-        post.setUser(user);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println(user);
+        Long userId = user.getId();
+        User user1 = usersDao.findById(userId).get();
+        post.setUser(user1);
         postsDao.save(post);
-
         emailService.prepareAndSend(post, "Testing create", "Testing the create method");
         return "redirect:/posts";
     }
 
     @GetMapping("posts/{id}/edit")
     public String editPost(@PathVariable long id, Model model){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
         Post post = postsDao.findById(id).get();
-        model.addAttribute("post", post);
-//        Long user = post.getUser(usersDao).getId();
-//        System.out.println(user);
+        System.out.println(userId);
+        System.out.println(post.getUser().getId());
+        if(userId == post.getUser().getId()){
+            model.addAttribute("post", post);
+        }
         return "posts/edit";
     }
 
@@ -61,10 +72,10 @@ public class PostController {
 
     @PostMapping("posts/{id}/edit")
     public String editPost(@ModelAttribute Post post, @PathVariable long id){
-        Post edited = postsDao.findById(id).get();
-        edited.setTitle(post.getTitle());
-        edited.setBody(post.getBody());
-        postsDao.save(edited);
+            Post edited = postsDao.findById(id).get();
+            edited.setTitle(post.getTitle());
+            edited.setBody(post.getBody());
+            postsDao.save(edited);
         return "redirect:/posts/" + id +"/find";
     }
 
@@ -93,8 +104,15 @@ public class PostController {
 //
     @GetMapping("posts/{id}/delete")
     public String deletePost(@PathVariable long id){
-        postsDao.deleteById(id);
-        return "redirect:/posts";
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Post post = postsDao.findById(id).get();
+        Long userId = user.getId();
+        System.out.println("User Id: "+ userId);
+        System.out.println("Posts user id: "+ post.getUser().getId());
+        if(userId == post.getUser().getId()){
+            postsDao.deleteById(id);
+        }
+            return "redirect:/posts";
     }
 
     @GetMapping("posts/{id}/find")
@@ -103,9 +121,6 @@ public class PostController {
         model.addAttribute("post", post);
         return "posts/show";
     }
-
-
-
 
 //    =================================
     //    @GetMapping("/posts")

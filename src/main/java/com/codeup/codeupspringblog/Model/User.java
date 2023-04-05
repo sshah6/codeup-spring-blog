@@ -22,6 +22,14 @@ public class User {
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
     private List<Post> userPosts;
 
+    public User(User copy){
+        id = copy.id;
+        username = copy.username;
+        email = copy.email;
+        password = copy.password;
+
+    }
+
     public User(Long id, String username, String email, String password) {
         this.id = id;
         this.username = username;
@@ -76,5 +84,16 @@ public class User {
 
     public void setUserPosts(List<Post> userPosts) {
         this.userPosts = userPosts;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", userPosts=" + userPosts +
+                '}';
     }
 }
